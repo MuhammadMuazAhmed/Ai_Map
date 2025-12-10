@@ -1,19 +1,18 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import Groq from "groq-sdk";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
   try {
-    const apiKey = process.env.GEMINI_API_KEY;
+    const apiKey = process.env.GROQ_API_KEY;
 
     if (!apiKey) {
       return NextResponse.json(
-        { error: "GEMINI_API_KEY is not defined in environment variables" },
+        { error: "GROQ_API_KEY is not defined in environment variables" },
         { status: 500 }
       );
     }
 
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-lite" });
+    const groq = new Groq({ apiKey });
 
     const { prompt } = await request.json();
 
@@ -24,9 +23,12 @@ export async function POST(request: Request) {
       );
     }
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+    const chatCompletion = await groq.chat.completions.create({
+      messages: [{ role: "user", content: prompt }],
+      model: "llama-3.3-70b-versatile",
+    });
+
+    const text = chatCompletion.choices[0]?.message?.content || "";
 
     return NextResponse.json({ text });
   } catch (error) {

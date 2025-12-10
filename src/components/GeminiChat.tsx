@@ -66,7 +66,7 @@ export default function GeminiChat() {
         <div className="bg-white rounded-lg shadow-xl w-80 sm:w-96 flex flex-col max-h-[600px] border border-gray-200">
           <div className="p-4 border-b border-gray-200 flex justify-between items-center bg-gray-50 rounded-t-lg">
             <h3 className="font-semibold text-gray-800 flex items-center gap-2">
-              <span className="text-blue-600">✨</span> Gemini AI
+              <span className="text-blue-600">✨</span> Groq AI
             </h3>
             <button
               onClick={() => setIsOpen(false)}
